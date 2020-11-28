@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.AsgnFileMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.AsgnFile">
+    <id column="asgn_id" jdbcType="INTEGER" property="asgnId" />
+    <id column="file_id" jdbcType="INTEGER" property="fileId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.zhenwen.domain.AsgnFile">
+    delete from asgn_file
+    where asgn_id = #{asgnId,jdbcType=INTEGER}
+      and file_id = #{fileId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByAsgnId">
+    delete from asgn_file
+    where asgn_id = #{asgnId}
+  </delete>
+  <insert id="insert" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.AsgnFile" useGeneratedKeys="true">
+    insert into asgn_file (file_id)
+    values (#{fileId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.AsgnFile" useGeneratedKeys="true">
+    insert into asgn_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.MoocTagMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.MoocTag">
+    <id column="mooc_id" jdbcType="INTEGER" property="moocId" />
+    <id column="tag_id" jdbcType="INTEGER" property="tagId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.zhenwen.domain.MoocTag">
+    delete from mooc_tag
+    where mooc_id = #{moocId,jdbcType=INTEGER}
+      and tag_id = #{tagId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="mooc_id" keyProperty="moocId" parameterType="com.zhenwen.domain.MoocTag" useGeneratedKeys="true">
+    insert into mooc_tag (mooc_id, tag_id)
+    values (#{moocId}, #{tagId})
+  </insert>
+  <insert id="insertSelective" keyColumn="mooc_id" keyProperty="moocId" parameterType="com.zhenwen.domain.MoocTag" useGeneratedKeys="true">
+    insert into mooc_tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="moocId != null">
+        mooc_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tagId != null">
+        #{moocId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="enrolled_date" jdbcType="TIMESTAMP" property="enrolledDate" />
+    <result column="school_no" jdbcType="VARCHAR" property="schoolNo" />
+    <result column="institute" jdbcType="VARCHAR" property="institute" />
+    <result column="major" jdbcType="VARCHAR" property="major" />
+    <result column="school" jdbcType="VARCHAR" property="school" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="roles" javaType="java.util.List" resultMap="com.zhenwen.mapper.RoleMapper.BaseResultMap"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, tel, `account`, `password`, email, enrolled_date, school_no, institute,
+    major, school, create_by, create_time, update_by, update_time, remark
+  </sql>
+
+  <sql id="findAll">
+    select *
+    from user u
+        left outer join user_role ur on u.user_id = ur.user_id
+        left outer join role r on ur.role_id = r.role_id
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+    where u.user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="findAll" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+  </select>
+  <select id="findByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+    where r.role_id = #{roleId}
+  </select>
+  <select id="findAllByRoleName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+    where r.role_name = #{roleName}
+  </select>
+  <select id="selectByAccountTelEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+    where u.account = #{name} or u.tel = #{name} or u.email = #{name}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.zhenwen.domain.User"
+          useGeneratedKeys="true">
+    insert into user (user_name, tel, account,
+      `password`, email, enrolled_date,
+      school_no, institute, major,
+      school, create_by, create_time,
+      update_by, update_time, remark
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{enrolledDate,jdbcType=TIMESTAMP},
+      #{schoolNo,jdbcType=VARCHAR}, #{institute,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR},
+      #{school,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.zhenwen.domain.User"
+          useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="enrolledDate != null">
+        enrolled_date,
+      </if>
+      <if test="schoolNo != null">
+        school_no,
+      </if>
+      <if test="institute != null">
+        institute,
+      </if>
+      <if test="major != null">
+        major,
+      </if>
+      <if test="school != null">
+        school,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolledDate != null">
+        #{enrolledDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="schoolNo != null">
+        #{schoolNo,jdbcType=VARCHAR},
+      </if>
+      <if test="institute != null">
+        #{institute,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null">
+        #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhenwen.domain.User">
+    update user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolledDate != null">
+        enrolled_date = #{enrolledDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="schoolNo != null">
+        school_no = #{schoolNo,jdbcType=VARCHAR},
+      </if>
+      <if test="institute != null">
+        institute = #{institute,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null">
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhenwen.domain.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      enrolled_date = #{enrolledDate,jdbcType=TIMESTAMP},
+      school_no = #{schoolNo,jdbcType=VARCHAR},
+      institute = #{institute,jdbcType=VARCHAR},
+      major = #{major,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

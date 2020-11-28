@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.AssignmentMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.Assignment">
+    <id column="asgn_id" jdbcType="INTEGER" property="asgnId" />
+    <result column="asgn_name" jdbcType="VARCHAR" property="asgnName" />
+    <result column="asgn_introduction" jdbcType="VARCHAR" property="asgnIntroduction" />
+    <result column="asgn_type" jdbcType="VARCHAR" property="asgnType" />
+    <result column="released_date" jdbcType="TIMESTAMP" property="releasedDate" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="max_score" jdbcType="INTEGER" property="maxScore" />
+    <result column="is_repeat" jdbcType="TINYINT" property="isRepeat" />
+    <result column="repeat_rate" jdbcType="INTEGER" property="repeatRate" />
+    <result column="return_rate" jdbcType="INTEGER" property="returnRate" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    asgn_id, asgn_name, asgn_introduction, asgn_type, released_date, deadline, max_score,
+    is_repeat, repeat_rate, return_rate, create_by, create_time, update_by, update_time,
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from assignment
+    where asgn_id = #{asgnId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByCourseId" resultMap="BaseResultMap">
+    select
+      a.asgn_id, asgn_name, asgn_introduction, asgn_type, released_date, deadline, max_score,
+      is_repeat, repeat_rate, return_rate, create_by, create_time, update_by, update_time,
+      remark
+    from assignment a
+      left join crse_asgn ca on a.asgn_id = ca.asgn_id
+    where crse_id = #{crseId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from assignment
+    where asgn_id = #{asgnId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.Assignment" useGeneratedKeys="true">
+    insert into assignment (asgn_name, asgn_introduction, asgn_type,
+      released_date, deadline, max_score,
+      is_repeat, repeat_rate, return_rate,
+      create_by, create_time, update_by,
+      update_time, remark)
+    values (#{asgnName,jdbcType=VARCHAR}, #{asgnIntroduction,jdbcType=VARCHAR}, #{asgnType,jdbcType=VARCHAR},
+      #{releasedDate,jdbcType=TIMESTAMP}, #{deadline,jdbcType=TIMESTAMP}, #{maxScore,jdbcType=INTEGER},
+      #{isRepeat,jdbcType=TINYINT}, #{repeatRate,jdbcType=INTEGER}, #{returnRate,jdbcType=INTEGER},
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.Assignment" useGeneratedKeys="true">
+    insert into assignment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="asgnName != null">
+        asgn_name,
+      </if>
+      <if test="asgnIntroduction != null">
+        asgn_introduction,
+      </if>
+      <if test="asgnType != null">
+        asgn_type,
+      </if>
+      <if test="releasedDate != null">
+        released_date,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="maxScore != null">
+        max_score,
+      </if>
+      <if test="isRepeat != null">
+        is_repeat,
+      </if>
+      <if test="repeatRate != null">
+        repeat_rate,
+      </if>
+      <if test="returnRate != null">
+        return_rate,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="asgnName != null">
+        #{asgnName,jdbcType=VARCHAR},
+      </if>
+      <if test="asgnIntroduction != null">
+        #{asgnIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="asgnType != null">
+        #{asgnType,jdbcType=VARCHAR},
+      </if>
+      <if test="releasedDate != null">
+        #{releasedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maxScore != null">
+        #{maxScore,jdbcType=INTEGER},
+      </if>
+      <if test="isRepeat != null">
+        #{isRepeat,jdbcType=TINYINT},
+      </if>
+      <if test="repeatRate != null">
+        #{repeatRate,jdbcType=INTEGER},
+      </if>
+      <if test="returnRate != null">
+        #{returnRate,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhenwen.domain.Assignment">
+    update assignment
+    <set>
+      <if test="asgnName != null">
+        asgn_name = #{asgnName,jdbcType=VARCHAR},
+      </if>
+      <if test="asgnIntroduction != null">
+        asgn_introduction = #{asgnIntroduction,jdbcType=VARCHAR},
+      </if>
+      <if test="asgnType != null">
+        asgn_type = #{asgnType,jdbcType=VARCHAR},
+      </if>
+      <if test="releasedDate != null">
+        released_date = #{releasedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maxScore != null">
+        max_score = #{maxScore,jdbcType=INTEGER},
+      </if>
+      <if test="isRepeat != null">
+        is_repeat = #{isRepeat,jdbcType=TINYINT},
+      </if>
+      <if test="repeatRate != null">
+        repeat_rate = #{repeatRate,jdbcType=INTEGER},
+      </if>
+      <if test="returnRate != null">
+        return_rate = #{returnRate,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where asgn_id = #{asgnId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhenwen.domain.Assignment">
+    update assignment
+    set asgn_name = #{asgnName,jdbcType=VARCHAR},
+      asgn_introduction = #{asgnIntroduction,jdbcType=VARCHAR},
+      asgn_type = #{asgnType,jdbcType=VARCHAR},
+      released_date = #{releasedDate,jdbcType=TIMESTAMP},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      max_score = #{maxScore,jdbcType=INTEGER},
+      is_repeat = #{isRepeat,jdbcType=TINYINT},
+      repeat_rate = #{repeatRate,jdbcType=INTEGER},
+      return_rate = #{returnRate,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where asgn_id = #{asgnId,jdbcType=INTEGER}
+  </update>
+</mapper>

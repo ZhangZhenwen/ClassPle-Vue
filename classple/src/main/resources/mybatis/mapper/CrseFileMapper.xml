@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.CrseFileMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.CrseFile">
+    <id column="crse_id" jdbcType="INTEGER" property="crseId" />
+    <id column="file_id" jdbcType="INTEGER" property="fileId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.zhenwen.domain.CrseFile">
+    delete from crse_file
+    where crse_id = #{crseId,jdbcType=INTEGER}
+      and file_id = #{fileId,jdbcType=INTEGER}
+  </delete>
+  <select id="findFileIdsByCrseId" resultType="java.lang.Integer">
+    select file_id from crse_file where crse_id = #{id}
+  </select>
+  <insert id="insert" keyColumn="crse_id" keyProperty="crseId" parameterType="com.zhenwen.domain.CrseFile" useGeneratedKeys="true">
+    insert into crse_file (file_id)
+    values (#{fileId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="crse_id" keyProperty="crseId" parameterType="com.zhenwen.domain.CrseFile" useGeneratedKeys="true">
+    insert into crse_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

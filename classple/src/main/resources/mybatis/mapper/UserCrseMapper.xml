@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhenwen.mapper.UserCrseMapper">
+  <resultMap id="BaseResultMap" type="com.zhenwen.domain.UserCrse">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <id column="crse_id" jdbcType="INTEGER" property="crseId" />
+    <result column="user_role" jdbcType="VARCHAR" property="userRole" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="school_no" jdbcType="VARCHAR" property="schoolNo" />
+    <result column="join_date" jdbcType="TIMESTAMP" property="joinDate" />
+    <result column="out_date" jdbcType="TIMESTAMP" property="outDate" />
+    <result column="sort_index" jdbcType="INTEGER" property="sortIndex" />
+    <result column="is_drop_out" jdbcType="BOOLEAN" property="isDropOut" />
+    <result column="is_file" jdbcType="BOOLEAN" property="isFile" />
+    <result column="is_deleted" jdbcType="BOOLEAN" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, crse_id, user_role, `name`, school_no, join_date, out_date, sort_index,
+    is_drop_out, is_file, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.zhenwen.domain.UserCrse" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_crse
+    where user_id = #{userId,jdbcType=INTEGER}
+      and crse_id = #{crseId,jdbcType=INTEGER}
+  </select>
+  <select id="selectCoursesByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_crse
+    where user_id = #{userId}
+  </select>
+  <select id="selectUserIdByCrseId" resultType="java.lang.Integer">
+    select user_id from user_crse where crse_id = #{crseId}
+  </select>
+  <select id="selectRoleCodeByUserIdCrseId" resultType="java.lang.String">
+    select user_role from user_crse where user_id = #{userId} and crse_id = #{crseId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.zhenwen.domain.UserCrse">
+    delete from user_crse
+    where user_id = #{userId,jdbcType=INTEGER}
+      and crse_id = #{crseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.zhenwen.domain.UserCrse">
+    insert into user_crse (<include refid="Base_Column_List"/>)
+    values (#{userId,jdbcType=INTEGER}, #{crseId,jdbcType=INTEGER}, #{userRole,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{schoolNo,jdbcType=INTEGER}, #{joinDate,jdbcType=TIMESTAMP}, #{outDate,jdbcType=TIMESTAMP},
+      #{sortIndex,jdbcType=INTEGER}, #{isDropOut,jdbcType=BOOLEAN}, #{isFile,jdbcType=BOOLEAN},
+      #{isDeleted,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.zhenwen.domain.UserCrse">
+    insert into user_crse
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="crseId != null">
+        crse_id,
+      </if>
+      <if test="userRole != null">
+        user_role,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="schoolNo != null">
+        school_no,
+      </if>
+      <if test="joinDate != null">
+        join_date,
+      </if>
+      <if test="outDate != null">
+        out_date,
+      </if>
+      <if test="sortIndex != null">
+        sort_index,
+      </if>
+      <if test="isDropOut != null">
+        is_drop_out,
+      </if>
+      <if test="isFile != null">
+        is_file,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="crseId != null">
+        #{crseId,jdbcType=INTEGER},
+      </if>
+      <if test="userRole != null">
+        #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolNo != null">
+        #{schoolNo,jdbcType=VARCHAR},
+      </if>
+      <if test="joinDate != null">
+        #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outDate != null">
+        #{outDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sortIndex != null">
+        #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="isDropOut != null">
+        #{isDropOut,jdbcType=BOOLEAN},
+      </if>
+      <if test="isFile != null">
+        #{isFile,jdbcType=BOOLEAN},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhenwen.domain.UserCrse">
+    update user_crse
+    <set>
+      <if test="userRole != null">
+        user_role = #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolNo != null">
+        school_no = #{schoolNo,jdbcType=VARCHAR},
+      </if>
+      <if test="joinDate != null">
+        join_date = #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outDate != null">
+        out_date = #{outDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sortIndex != null">
+        sort_index = #{sortIndex,jdbcType=INTEGER},
+      </if>
+      <if test="isDropOut != null">
+        is_drop_out = #{isDropOut,jdbcType=BOOLEAN},
+      </if>
+      <if test="isFile != null">
+        is_file = #{isFile,jdbcType=BOOLEAN},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+      and crse_id = #{crseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhenwen.domain.UserCrse">
+    update user_crse
+    set user_role = #{userRole,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR},
+      school_no = #{schoolNo,jdbcType=VARCHAR},
+      join_date = #{joinDate,jdbcType=TIMESTAMP},
+      out_date = #{outDate,jdbcType=TIMESTAMP},
+      sort_index = #{sortIndex,jdbcType=INTEGER},
+      is_drop_out = #{isDropOut,jdbcType=BOOLEAN},
+      is_file = #{isFile,jdbcType=BOOLEAN},
+      is_deleted = #{isDeleted,jdbcType=BOOLEAN}
+    where user_id = #{userId,jdbcType=INTEGER}
+      and crse_id = #{crseId,jdbcType=INTEGER}
+  </update>
+</mapper>
