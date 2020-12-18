@@ -53,6 +53,20 @@ public interface TaskMapper {
     List<Task> selectByAsgnIdUserId(Integer asgnId, Integer userId);
 
     /**
+     * 查找作业数量
+     * @param asgnId
+     * @return
+     */
+    Integer selectTaskCountByAsgnId(Integer asgnId);
+
+    /**
+     * 查找已批作业数量
+     * @param asgnId
+     * @return
+     */
+    Integer selectTaskHaveScoreCountByAsgnId(Integer asgnId);
+
+    /**
      * 更新记录
      * @param record 记录
      * @return 影响行数

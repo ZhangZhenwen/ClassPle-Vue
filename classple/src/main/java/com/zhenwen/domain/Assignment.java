@@ -1,9 +1,11 @@
 package com.zhenwen.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.zhenwen.common.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * assignment
@@ -34,11 +36,13 @@ public class Assignment extends BaseEntity {
     /**
      * 发布日期
      */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date releasedDate;
 
     /**
      * 截止日期
      */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     private Date deadline;
 
     /**
@@ -49,7 +53,7 @@ public class Assignment extends BaseEntity {
     /**
      * 是否差重
      */
-    private Byte isRepeat;
+    private Boolean isRepeat;
 
     /**
      * 差重预警
@@ -61,5 +65,14 @@ public class Assignment extends BaseEntity {
      */
     private Integer returnRate;
 
+    private Boolean isDeleted;
+
+    private List<File> files;
+
     private static final long serialVersionUID = 1L;
+
+    public Assignment() {
+        this.isDeleted = false;
+        this.releasedDate = new Date();
+    }
 }

@@ -11,6 +11,11 @@ class UserCrseMapperTest {
     UserCrseMapper userCrseMapper;
 
     @Test
+    void selectRoleCodeByUserIdCrseId() {
+        System.out.println(userCrseMapper.selectRoleCodeByUserIdCrseId(13, 2));
+    }
+
+    @Test
     void deleteByPrimaryKey() {
     }
 

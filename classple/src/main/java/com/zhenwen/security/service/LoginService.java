@@ -5,6 +5,7 @@ import com.zhenwen.common.exception.user.UserPasswordNotMatchException;
 import com.zhenwen.domain.User;
 import com.zhenwen.security.LoginUser;
 import com.zhenwen.utils.ServletUtils;
+import com.zhenwen.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -80,15 +81,18 @@ public class LoginService {
         Map<String, Object> infos = new HashMap<>(4);
 
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        User user = loginUser.getUser();
-        // 角色集合
-        Set<String> roles = permissionService.getRolePermission(user);
-        // 权限集合
-        Set<String> permissions = permissionService.getMenuPermission(user);
 
-        infos.put("user", user);
-        infos.put("roles", roles);
-        infos.put("permissions", permissions);
+        if (StringUtils.isNotNull(loginUser)) {
+            User user = loginUser.getUser();
+            // 角色集合
+            Set<String> roles = permissionService.getRolePermission(user);
+            // 权限集合
+            Set<String> permissions = permissionService.getMenuPermission(user);
+
+            infos.put("user", user);
+            infos.put("roles", roles);
+            infos.put("permissions", permissions);
+        }
 
         return infos;
     }

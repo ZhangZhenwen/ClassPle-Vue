@@ -3,6 +3,8 @@ package com.zhenwen.domain;
 import com.zhenwen.common.web.domain.BaseEntity;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * task
  * @author zhenwen
@@ -48,6 +50,8 @@ public class Task extends BaseEntity {
      * 是否删除
      */
     private Boolean isDeleted;
+
+    private List<File> files;
 
     private static final long serialVersionUID = 1L;
 

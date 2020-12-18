@@ -1,8 +1,8 @@
 package com.zhenwen.domain;
 
+import com.zhenwen.common.web.domain.BaseEntity;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Date;
  * @author zhenwen
  */
 @Data
-public class UserCrse implements Serializable {
+public class UserCrse extends BaseEntity {
 
     /**
      * 用户ID

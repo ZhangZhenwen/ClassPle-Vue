@@ -1,5 +1,6 @@
 package com.zhenwen.utils;
 
+import com.zhenwen.common.constant.UserConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -18,5 +19,9 @@ public class ApplicationUtils {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public static Boolean isTch(String code) {
+        return code.equals(UserConstants.TCH) || code.equals(UserConstants.ADMIN);
     }
 }

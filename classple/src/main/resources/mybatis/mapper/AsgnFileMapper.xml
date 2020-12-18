@@ -15,8 +15,8 @@
     where asgn_id = #{asgnId}
   </delete>
   <insert id="insert" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.AsgnFile" useGeneratedKeys="true">
-    insert into asgn_file (file_id)
-    values (#{fileId,jdbcType=INTEGER})
+    insert into asgn_file (asgn_id, file_id)
+    values (#{asgnId,jdbcType=INTEGER}, #{fileId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.AsgnFile" useGeneratedKeys="true">
     insert into asgn_file

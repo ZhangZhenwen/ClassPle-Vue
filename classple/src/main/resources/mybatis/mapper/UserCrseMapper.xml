@@ -18,7 +18,7 @@
     user_id, crse_id, user_role, `name`, school_no, join_date, out_date, sort_index,
     is_drop_out, is_file, is_deleted
   </sql>
-  <select id="selectByPrimaryKey" parameterType="com.zhenwen.domain.UserCrse" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user_crse
@@ -36,6 +36,17 @@
   </select>
   <select id="selectRoleCodeByUserIdCrseId" resultType="java.lang.String">
     select user_role from user_crse where user_id = #{userId} and crse_id = #{crseId}
+  </select>
+  <select id="selectUserCountByCrseId" resultType="java.lang.Integer">
+    select count(user_id) from user_crse where crse_id = #{crseId}
+  </select>
+  <select id="selectUserCrseByCrseId" resultMap="BaseResultMap">
+    select * from user_crse where crse_id = #{crseId}
+  </select>
+  <select id="selectUserIdByCrseIdRoleCode" resultType="java.lang.Integer">
+    select user_id from user_crse
+    where crse_id = #{crseId}
+      and user_role = #{roleCode}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.zhenwen.domain.UserCrse">
     delete from user_crse

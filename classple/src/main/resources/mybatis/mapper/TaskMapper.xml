@@ -15,30 +15,36 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="files" javaType="java.util.List" resultMap="com.zhenwen.mapper.FileMapper.BaseResultMap"/>
   </resultMap>
   <sql id="Base_Column_List">
     task_id, asgn_id, user_id, score, repeat_rate, updated_count, is_return, is_deleted,
     create_by, create_time, update_by, update_time, remark
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <sql id="findAll">
     select
-    <include refid="Base_Column_List" />
-    from task
-    where task_id = #{taskId,jdbcType=INTEGER}
+      *
+    from task t
+           left join task_file tf on t.task_id = tf.task_id
+           left join file f on tf.file_id = f.file_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <include refid="findAll"/>
+    where t.task_id = #{taskId,jdbcType=INTEGER}
   </select>
   <select id="selectByAsgnId" resultMap="BaseResultMap">
-    select
-      task_id, asgn_id, user_id, score, repeat_rate, updated_count, is_return, is_deleted,
-      create_by, create_time, update_by, update_time, remark
-    from task t
-    where asgn_id = #{crseId}
+    <include refid="findAll"/>
+    where t.asgn_id = #{asgnId}
   </select>
   <select id="selectByAsgnIdUserId" resultMap="BaseResultMap">
-    select
-      task_id, t.asgn_id, user_id, score, t.repeat_rate, updated_count, is_return, is_deleted,
-      t.create_by, t.create_time, t.update_by, t.update_time, t.remark
-    from task t
-    where asgn_id = #{asgnId} and user_id = #{userId}
+    <include refid="findAll"/>
+    where t.asgn_id = #{asgnId} and t.user_id = #{userId}
+  </select>
+  <select id="selectTaskCountByAsgnId" resultType="java.lang.Integer">
+    select count(*) from task where asgn_id = #{asgnId};
+  </select>
+  <select id="selectTaskHaveScoreCountByAsgnId" resultType="java.lang.Integer">
+    select count(score) from task where asgn_id = #{asgnId};
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from task

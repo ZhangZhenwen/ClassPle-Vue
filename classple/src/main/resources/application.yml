@@ -3,7 +3,7 @@ application:
   name: KTP
 
   # 上传文件的路径
-  profile: /Users/zhenwen/MyProjects/classple/file
+  profile: /Users/zhenwen/MyProjects/ClassPle-Vue/classple/file
 
 spring:
   servlet:
@@ -27,7 +27,7 @@ spring:
     timeout: 10s
 
 server:
-  port: 8081
+  port: 8080
 
 mybatis:
   type-aliases-package: com.zhenwen.domain

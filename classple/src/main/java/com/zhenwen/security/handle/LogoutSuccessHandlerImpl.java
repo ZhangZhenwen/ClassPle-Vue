@@ -1,7 +1,11 @@
 package com.zhenwen.security.handle;
 
+import com.alibaba.fastjson.JSON;
+import com.zhenwen.common.constant.HttpStatus;
+import com.zhenwen.common.web.domain.AjaxResult;
 import com.zhenwen.security.LoginUser;
 import com.zhenwen.security.service.TokenService;
+import com.zhenwen.utils.ServletUtils;
 import com.zhenwen.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,6 +35,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             tokenService.delLoginUser(loginUser.getToken());
         }
 
-
+        ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(HttpStatus.SUCCESS, "退出成功")));
     }
 }

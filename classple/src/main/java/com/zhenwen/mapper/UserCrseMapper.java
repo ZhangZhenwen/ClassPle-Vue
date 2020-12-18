@@ -32,10 +32,11 @@ public interface UserCrseMapper {
 
     /**
      * 选择记录
-     * @param key
+     * @param userId
+     * @param crseId
      * @return
      */
-    UserCrse selectByPrimaryKey(UserCrse key);
+    UserCrse selectByPrimaryKey(Integer userId, Integer crseId);
 
     /**
      * 根据用户ID选择记录
@@ -55,11 +56,33 @@ public interface UserCrseMapper {
     String selectRoleCodeByUserIdCrseId(Integer userId, Integer crseId);
 
     /**
+     * 根据课程ID 用户身份查找用户
+     * @param crseId
+     * @param roleCode
+     * @return
+     */
+    List<Integer> selectUserIdByCrseIdRoleCode(Integer crseId, String roleCode);
+
+    /**
      * 根据课程ID选择用户ID
      * @param crseId
      * @return
      */
     List<Integer> selectUserIdByCrseId(Integer crseId);
+
+    /**
+     * 查找课程人数
+     * @param crseId
+     * @return
+     */
+    Integer selectUserCountByCrseId(Integer crseId);
+
+    /**
+     * 根据课程ID查找
+     * @param crseId
+     * @return
+     */
+    List<UserCrse> selectUserCrseByCrseId(Integer crseId);
 
     /**
      * 更新记录

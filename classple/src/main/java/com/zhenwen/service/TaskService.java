@@ -37,10 +37,9 @@ public interface TaskService {
      * 根据作业ID查找作业
      *
      * @param asgnId
-     * @param crseId
      * @return
      */
-    List<Task> findByAsgnId(Integer crseId, Integer asgnId);
+    List<Task> findTaskListByAsgnId(Integer asgnId);
 
     /**
      * 添加
@@ -62,4 +61,32 @@ public interface TaskService {
      * @return bool
      */
     Boolean deleteById(int id);
+
+    /**
+     * 查找作业数量
+     * @param asgnId
+     * @return
+     */
+    Integer selectTaskCountByAsgnId(Integer asgnId);
+
+    /**
+     * 查找已批作业数量
+     * @param asgnId
+     * @return
+     */
+    Integer selectTaskHaveScoreCountByAsgnId(Integer asgnId);
+
+    /**
+     * 根据作业ID查找
+     * @param asgnId
+     * @return
+     */
+    Task findByAsgnId(Integer asgnId);
+
+    /**
+     * 批改作业
+     * @param task
+     * @return
+     */
+    Boolean checkTask(Task task);
 }

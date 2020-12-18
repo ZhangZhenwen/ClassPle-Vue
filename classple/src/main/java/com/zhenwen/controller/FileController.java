@@ -4,10 +4,7 @@ import com.zhenwen.common.web.domain.AjaxResult;
 import com.zhenwen.service.FileService;
 import com.zhenwen.utils.file.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +30,7 @@ public class FileController {
     }
 
     @GetMapping("/download")
-    public void download(int id, HttpServletResponse response, HttpServletRequest request) {
+    public void download(Integer id, HttpServletResponse response, HttpServletRequest request) {
         String filename = fileService.findById(id).getFileName();
 
         try {
@@ -49,7 +46,7 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public AjaxResult upload(MultipartFile[] files) {
-        return AjaxResult.success(fileService.upload(files));
+    public AjaxResult upload(@RequestParam MultipartFile file) {
+        return AjaxResult.success(fileService.upload(file));
     }
 }

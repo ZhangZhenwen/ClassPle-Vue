@@ -10,6 +10,9 @@
     where crse_id = #{crseId,jdbcType=INTEGER}
       and asgn_id = #{asgnId,jdbcType=INTEGER}
   </delete>
+  <select id="selectCrseIdByAsgnId" resultType="java.lang.Integer">
+    select crse_id from crse_asgn where asgn_id = #{asgnId}
+  </select>
   <insert id="insert" keyColumn="crse_id" keyProperty="crseId" parameterType="com.zhenwen.domain.CrseAsgn" useGeneratedKeys="true">
     insert into crse_asgn (crse_id, asgn_id)
     values (#{crseId,jdbcType=INTEGER}, #{asgnId,jdbcType=INTEGER})

@@ -79,6 +79,13 @@ public interface FileService {
     List<Integer> upload(MultipartFile[] files);
 
     /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    Integer upload(MultipartFile file);
+
+    /**
      * 下载文件
      * @param fileId file id
      * @return 资源

@@ -74,6 +74,13 @@ public interface UserService {
      * @return bool
      */
     User selectByAccountTelEmail(String name);
+
+    /**
+     * 查找用户在课程中的角色
+     * @param crseId
+     * @return
+     */
+    String selectRoleCodeByCrseId(Integer crseId);
 }
 
 

@@ -10,6 +10,7 @@
     <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
     <result column="max_score" jdbcType="INTEGER" property="maxScore" />
     <result column="is_repeat" jdbcType="TINYINT" property="isRepeat" />
+    <result column="is_deleted" jdbcType="TINYINT" property="isDeleted" />
     <result column="repeat_rate" jdbcType="INTEGER" property="repeatRate" />
     <result column="return_rate" jdbcType="INTEGER" property="returnRate" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
@@ -17,26 +18,31 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="files" javaType="java.util.List" resultMap="com.zhenwen.mapper.FileMapper.BaseResultMap"/>
   </resultMap>
   <sql id="Base_Column_List">
     asgn_id, asgn_name, asgn_introduction, asgn_type, released_date, deadline, max_score,
-    is_repeat, repeat_rate, return_rate, create_by, create_time, update_by, update_time,
+    is_repeat, is_deleted, repeat_rate, return_rate, create_by, create_time, update_by, update_time,
     remark
   </sql>
+  <sql id="findAll">
+    select *
+    from assignment a
+           left outer join asgn_file af on a.asgn_id = af.asgn_id
+           left outer join file f on af.file_id = f.file_id
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from assignment
-    where asgn_id = #{asgnId,jdbcType=INTEGER}
+    <include refid="findAll"/>
+    where a.asgn_id = #{asgnId,jdbcType=INTEGER}
   </select>
   <select id="selectByCourseId" resultMap="BaseResultMap">
     select
-      a.asgn_id, asgn_name, asgn_introduction, asgn_type, released_date, deadline, max_score,
-      is_repeat, repeat_rate, return_rate, create_by, create_time, update_by, update_time,
-      remark
+      *
     from assignment a
+      left outer join asgn_file af on a.asgn_id = af.asgn_id
+      left outer join file f on af.file_id = f.file_id
       left join crse_asgn ca on a.asgn_id = ca.asgn_id
-    where crse_id = #{crseId}
+    where crse_id = #{crseId} and a.is_deleted = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from assignment
@@ -45,12 +51,12 @@
   <insert id="insert" keyColumn="asgn_id" keyProperty="asgnId" parameterType="com.zhenwen.domain.Assignment" useGeneratedKeys="true">
     insert into assignment (asgn_name, asgn_introduction, asgn_type,
       released_date, deadline, max_score,
-      is_repeat, repeat_rate, return_rate,
+      is_repeat, is_deleted, repeat_rate, return_rate,
       create_by, create_time, update_by,
       update_time, remark)
     values (#{asgnName,jdbcType=VARCHAR}, #{asgnIntroduction,jdbcType=VARCHAR}, #{asgnType,jdbcType=VARCHAR},
       #{releasedDate,jdbcType=TIMESTAMP}, #{deadline,jdbcType=TIMESTAMP}, #{maxScore,jdbcType=INTEGER},
-      #{isRepeat,jdbcType=TINYINT}, #{repeatRate,jdbcType=INTEGER}, #{returnRate,jdbcType=INTEGER},
+      #{isRepeat,jdbcType=TINYINT}, #{isDeleted, jdbcType=TINYINT}, #{repeatRate,jdbcType=INTEGER}, #{returnRate,jdbcType=INTEGER},
       #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
       #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
@@ -77,6 +83,9 @@
       </if>
       <if test="isRepeat != null">
         is_repeat,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
       <if test="repeatRate != null">
         repeat_rate,
@@ -121,6 +130,9 @@
       </if>
       <if test="isRepeat != null">
         #{isRepeat,jdbcType=TINYINT},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted},
       </if>
       <if test="repeatRate != null">
         #{repeatRate,jdbcType=INTEGER},
@@ -169,6 +181,9 @@
       <if test="isRepeat != null">
         is_repeat = #{isRepeat,jdbcType=TINYINT},
       </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isRepeat,jdbcType=TINYINT},
+      </if>
       <if test="repeatRate != null">
         repeat_rate = #{repeatRate,jdbcType=INTEGER},
       </if>
@@ -202,6 +217,7 @@
       deadline = #{deadline,jdbcType=TIMESTAMP},
       max_score = #{maxScore,jdbcType=INTEGER},
       is_repeat = #{isRepeat,jdbcType=TINYINT},
+      is_deleted = #{isDeleted,jdbcType=TINYINT},
       repeat_rate = #{repeatRate,jdbcType=INTEGER},
       return_rate = #{returnRate,jdbcType=INTEGER},
       create_by = #{createBy,jdbcType=VARCHAR},

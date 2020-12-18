@@ -4,10 +4,7 @@ import com.zhenwen.common.web.domain.AjaxResult;
 import com.zhenwen.domain.Task;
 import com.zhenwen.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhenwen
@@ -21,26 +18,36 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping("/submit")
-    public AjaxResult submit(Task task) {
+    public AjaxResult submit(@RequestBody Task task) {
         taskService.insert(task);
 
         return AjaxResult.success();
     }
 
     @PostMapping("/edit")
-    public AjaxResult updateTask(Task task) {
+    public AjaxResult updateTask(@RequestBody Task task) {
         taskService.updateById(task);
 
         return AjaxResult.success();
     }
 
-    @GetMapping("/correct")
-    public AjaxResult correct(Integer crseId, Integer asgnId) {
-        return AjaxResult.success(taskService.findByAsgnId(crseId, asgnId));
+    @PostMapping("/check")
+    public AjaxResult checkTask(@RequestBody Task task) {
+        return AjaxResult.success(taskService.checkTask(task));
     }
 
-    @GetMapping("/detail")
-    public AjaxResult detail(Integer id) {
+    @PostMapping("/correct")
+    public AjaxResult correct(@RequestBody Integer asgnId) {
+        return AjaxResult.success(taskService.findTaskListByAsgnId(asgnId));
+    }
+
+    @PostMapping("/detail")
+    public AjaxResult detail(@RequestBody Integer id) {
         return AjaxResult.success(taskService.findById(id));
+    }
+
+    @PostMapping("/detailByAsgnId")
+    public AjaxResult detailByAsgnId(@RequestBody Integer id) {
+        return AjaxResult.success(taskService.findByAsgnId(id));
     }
 }

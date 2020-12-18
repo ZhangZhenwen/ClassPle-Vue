@@ -1,7 +1,7 @@
 package com.zhenwen.service;
 
 import com.zhenwen.domain.Course;
-import com.zhenwen.domain.User;
+import com.zhenwen.domain.UserCrse;
 import com.zhenwen.utils.Pager;
 
 import java.util.List;
@@ -12,32 +12,11 @@ import java.util.List;
  */
 
 public interface CourseService {
-
-    /**
-     * 查找正常课程
-     * @param user user ID
-     * @return list
-     */
-    List<Course> findCommonCoursesByUserId(User user);
-
     /**
      * 查找正常课程
      * @return list
      */
     List<Course> findCommonCoursesByUser();
-
-    /**
-     * 查找归档课程
-     * @param user user ID
-     * @return list
-     */
-    List<Course> findFiledCoursesByUserId(User user);
-
-    /**
-     * 查找归档课程
-     * @return list
-     */
-    List<Course> findFiledCoursesByUser();
 
     /**
      * 查找所有
@@ -97,6 +76,14 @@ public interface CourseService {
     Boolean inviteCourse(Integer id, String code);
 
     /**
+     * 退课
+     * @param id 课程ID
+     * @return
+     */
+    Boolean dropoutCourse(Integer id);
+
+
+    /**
      * 查找学生数量
      * @param id ID
      * @return 学生数量
@@ -109,4 +96,11 @@ public interface CourseService {
      * @return 老师数量
      */
     Integer findTchNum(Integer id);
+
+    /**
+     * 选择课程用户
+     * @param crseId
+     * @return
+     */
+    List<UserCrse> selectUserListByCrseId(Integer crseId);
 }

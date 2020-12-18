@@ -36,26 +36,10 @@
   <select id="findCoursesByCrseIds" parameterType="java.util.List" resultMap="BaseResultMap">
     select *
     from course
-    where crse_id in
+    where is_deleted = 0 and crse_id in
         <foreach collection="list" item="crseId" index="index" open="(" close=")" separator=",">
           #{crseId}
         </foreach>
-  </select>
-  <select id="findCommonCoursesByCrseIds" parameterType="java.util.List" resultMap="BaseResultMap">
-    select *
-    from course
-    where is_deleted = 0 and is_file = 0 and crse_id in
-    <foreach collection="list" item="crseId" index="index" open="(" close=")" separator=",">
-      #{crseId}
-    </foreach>
-  </select>
-  <select id="findFiledCoursesByCrseIds" parameterType="java.util.List" resultMap="BaseResultMap">
-    select *
-    from course
-    where is_deleted = 0 and is_file = 1 and crse_id in
-    <foreach collection="list" item="crseId" index="index" open="(" close=")" separator=",">
-      #{crseId}
-    </foreach>
   </select>
   <select id="findCourseByCourseCode" resultMap="BaseResultMap">
     select * from course where crse_code = #{code}

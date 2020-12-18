@@ -8,6 +8,13 @@ import com.zhenwen.domain.CrseAsgn;
 public interface CrseAsgnMapper {
 
     /**
+     * 根据作业ID选择课程ID
+     * @param asgnId
+     * @return
+     */
+    Integer selectCrseIdByAsgnId(Integer asgnId);
+
+    /**
      * 删除记录
      * @param key
      * @return

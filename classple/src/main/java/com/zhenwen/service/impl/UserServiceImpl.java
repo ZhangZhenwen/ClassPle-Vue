@@ -1,12 +1,15 @@
 package com.zhenwen.service.impl;
 
 import com.zhenwen.common.constant.UserConstants;
+import com.zhenwen.common.constant.UserStatus;
 import com.zhenwen.domain.Role;
 import com.zhenwen.domain.User;
 import com.zhenwen.domain.UserRole;
 import com.zhenwen.mapper.RoleMapper;
 import com.zhenwen.mapper.UserMapper;
 import com.zhenwen.mapper.UserRoleMapper;
+import com.zhenwen.security.service.LoginService;
+import com.zhenwen.service.RoleService;
 import com.zhenwen.service.UserService;
 import com.zhenwen.utils.Pager;
 import com.zhenwen.utils.StringUtils;
@@ -31,6 +34,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRoleMapper userRoleMapper;
+
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    LoginService loginService;
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
@@ -60,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
         user.setAccount("ktp" + user.getTel());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(UserStatus.OK.getCode());
 
         result = userMapper.insertSelective(user);
 
@@ -120,5 +130,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectByAccountTelEmail(String account) {
         return userMapper.selectByAccountTelEmail(account);
+    }
+
+    @Override
+    public String selectRoleCodeByCrseId(Integer crseId) {
+        User user = (User) loginService.getInfo().get("user");
+
+        return roleService.selectRoleCodeByUserIdCrseId(user.getUserId(), crseId);
     }
 }

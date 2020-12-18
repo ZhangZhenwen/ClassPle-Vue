@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -131,6 +132,30 @@ public class FileServiceImpl implements FileService {
         }
 
         return ids;
+    }
+
+    @Override
+    public Integer upload(MultipartFile file) {
+        String filePath = ApplicationConfig.getUploadPath();
+
+        File myFile = new File();
+        String fileName = null;
+
+        try {
+            fileName = FileUploadUtils.upload(filePath, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        myFile.setFileName(file.getOriginalFilename());
+        myFile.setFileUrl(fileName);
+        myFile.setFileSize((double) file.getSize());
+        myFile.setFileType(file.getContentType());
+        myFile.setCreateTime(new Date());
+
+        fileMapper.insertSelective(myFile);
+
+        return myFile.getFileId();
     }
 
     @Override

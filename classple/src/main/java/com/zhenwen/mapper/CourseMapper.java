@@ -61,22 +61,6 @@ public interface CourseMapper {
     List<Course> findCoursesByCrseIds(List<Integer> crseId);
 
     /**
-     * 查找普通课程
-     *
-     * @param crseId 课程ID
-     * @return list
-     */
-    List<Course> findCommonCoursesByCrseIds(List<Integer> crseId);
-
-    /**
-     * 查找归档课程
-     *
-     * @param crseId 课程ID
-     * @return list
-     */
-    List<Course> findFiledCoursesByCrseIds(List<Integer> crseId);
-
-    /**
      * 更新记录
      * @param record 记录
      * @return 影响行数

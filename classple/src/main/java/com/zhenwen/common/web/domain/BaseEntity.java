@@ -3,7 +3,6 @@ package com.zhenwen.common.web.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,8 +37,6 @@ public class BaseEntity implements Serializable {
 
     /** 备注 */
     private String remark;
-
-    private MultipartFile[] files;
 
     /** 开始时间 */
     @JsonIgnore

@@ -8,7 +8,9 @@ import com.zhenwen.security.service.LoginService;
 import com.zhenwen.security.service.TokenService;
 import com.zhenwen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,7 +29,7 @@ public class LoginController {
     TokenService tokenService;
 
     @PostMapping("/login")
-    public AjaxResult login(LoginBody loginBody) {
+    public AjaxResult login(@RequestBody LoginBody loginBody) {
         AjaxResult ajax = AjaxResult.success();
 
         String token = loginService.login(
@@ -42,12 +44,17 @@ public class LoginController {
     }
 
     @PostMapping("/register/tch")
-    public AjaxResult registerTch(User user) {
+    public AjaxResult registerTch(@RequestBody User user) {
         return userService.insertTchUser(user) ? AjaxResult.success() : AjaxResult.error();
     }
 
     @PostMapping("/register/stu")
-    public AjaxResult registerStu(User user) {
+    public AjaxResult registerStu(@RequestBody User user) {
         return userService.insertStuUser(user) ? AjaxResult.success() : AjaxResult.error();
+    }
+
+    @GetMapping("/user/getInfo")
+    public AjaxResult getInfo() {
+        return AjaxResult.success(loginService.getInfo());
     }
 }

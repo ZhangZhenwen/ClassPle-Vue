@@ -1,20 +1,20 @@
 package com.zhenwen.service.impl;
 
-import com.zhenwen.domain.AsgnFile;
-import com.zhenwen.domain.Assignment;
-import com.zhenwen.domain.CrseAsgn;
-import com.zhenwen.domain.Task;
+import com.zhenwen.common.constant.UserConstants;
+import com.zhenwen.domain.*;
 import com.zhenwen.mapper.AsgnFileMapper;
 import com.zhenwen.mapper.AssignmentMapper;
 import com.zhenwen.mapper.CrseAsgnMapper;
-import com.zhenwen.service.AssignmentService;
-import com.zhenwen.service.FileService;
-import com.zhenwen.service.TaskService;
+import com.zhenwen.security.service.LoginService;
+import com.zhenwen.service.*;
 import com.zhenwen.utils.Pager;
 import com.zhenwen.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,6 +39,15 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Autowired
     TaskService taskService;
 
+    @Autowired
+    RoleService roleService;
+
+    @Autowired
+    LoginService loginService;
+
+    @Autowired
+    CourseService courseService;
+
     @Override
     public List<Assignment> findAll() {
         return null;
@@ -60,11 +69,17 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public Integer findCourseIdByAsgnId(Integer asgnId) {
+        return crseAsgnMapper.selectCrseIdByAsgnId(asgnId);
+    }
+
+    @Override
     public Boolean insert(Assignment assignment) {
+        assignment.setReleasedDate(new Date());
         assignmentMapper.insert(assignment);
 
         if (StringUtils.isNotNull(assignment.getParams().get("crseId"))) {
-            Integer crseId = (Integer) assignment.getParams().get("crseId");
+            Integer crseId = Integer.parseInt((String) assignment.getParams().get("crseId"));
 
             CrseAsgn crseAsgn = new CrseAsgn(crseId, assignment.getAsgnId());
             crseAsgnMapper.insert(crseAsgn);
@@ -82,13 +97,15 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     private Boolean insertFileList(Assignment assignment) {
-        if (StringUtils.isNotNull(assignment.getFiles())) {
-            List<Integer> ids = fileService.upload(assignment.getFiles());
+        if (StringUtils.isNotNull(assignment.getParams().get("files"))) {
+            ArrayList<Integer> ids = (ArrayList<Integer>) assignment.getParams().get("files");
 
             for (Integer id : ids) {
                 AsgnFile asgnFile = new AsgnFile(assignment.getAsgnId(), id);
+
                 asgnFileMapper.insert(asgnFile);
             }
+
         }
 
         return true;
@@ -96,6 +113,74 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public Boolean deleteById(int id) {
-        return assignmentMapper.deleteByPrimaryKey(id) > 0;
+        Assignment assignment = assignmentMapper.selectByPrimaryKey(id);
+
+        assignment.setIsDeleted(true);
+
+        return assignmentMapper.updateByPrimaryKey(assignment) > 0;
+    }
+
+    @Override
+    public List<Assignment> selectAssignmentByCrseId(Integer crseId) {
+        //扮演老师
+        if (roleService.checkRoleInCourse(crseId, UserConstants.TCH + UserConstants.ADMIN)) {
+            return selectAssignmentForTch(crseId);
+        } else {
+            return selectAssignmentForStu(crseId);
+        }
+    }
+
+    private List<Assignment> selectAssignmentForTch(Integer crseId) {
+        List<Assignment> assignmentList = assignmentMapper.selectByCourseId(crseId);
+
+        for (Assignment assignment : assignmentList) {
+            HashMap<String, Object> params = new HashMap<>();
+
+            int submitTaskCount = taskService.selectTaskCountByAsgnId(assignment.getAsgnId());
+
+            int checkTaskCount = taskService.selectTaskHaveScoreCountByAsgnId(assignment.getAsgnId());
+            int uncheckTaskCount = submitTaskCount - checkTaskCount;
+            int unpaidTaskCount = courseService.findStuNum(crseId) - submitTaskCount;
+
+            params.put("check", checkTaskCount);
+            params.put("uncheck", uncheckTaskCount);
+            params.put("unpaid", unpaidTaskCount);
+
+            assignment.setParams(params);
+        }
+
+        return assignmentList;
+    }
+
+    private List<Assignment> selectAssignmentForStu(Integer crseId) {
+        User user = (User) loginService.getInfo().get("user");
+        List<Assignment> assignmentList = assignmentMapper.selectByCourseId(crseId);
+
+        for (Assignment assignment : assignmentList) {
+            HashMap<String, Object> params = new HashMap<>();
+
+            List<Task> taskList = taskService.findTaskListByAsgnId(assignment.getAsgnId());
+
+            if (StringUtils.isNotNull(taskList) && taskList.size() != 0) {
+                if (StringUtils.isNotNull(taskList.get(0).getScore())) {
+                    params.put("status", taskList.get(0).getScore());
+                } else {
+                    params.put("status", "已提交");
+                }
+            }
+
+            assignment.setParams(params);
+        }
+
+        return assignmentList;
+    }
+
+    @Override
+    public List<UserCrse> selectUserCrseByAsgnId(Integer asgnId) {
+        Integer crseId = findCourseIdByAsgnId(asgnId);
+
+        List<UserCrse> userCrseList = courseService.selectUserListByCrseId(crseId);
+
+        return userCrseList;
     }
 }
